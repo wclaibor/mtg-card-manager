@@ -1,4 +1,4 @@
-import styles from './card-manager.module.scss';
+import styles from './card-manager.module.scss'
 
 import {
   ColDef,
@@ -8,35 +8,37 @@ import {
   IServerSideDatasource,
   IServerSideGetRowsParams,
   ModuleRegistry,
-} from '@ag-grid-community/core';
-import '@ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
-import '@ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-import { ServerSideRowModelModule } from '@ag-grid-enterprise/server-side-row-model';
-import { useCallback, useEffect, useState } from 'react';
-import { Card } from 'scryfall-sdk';
-import { CardService } from '../services/card.service';
+} from '@ag-grid-community/core'
+import '@ag-grid-community/styles/ag-grid.css' // Core grid CSS, always needed
+import '@ag-grid-community/styles/ag-theme-alpine.css' // Optional theme CSS
+import { ServerSideRowModelModule } from '@ag-grid-enterprise/server-side-row-model'
+import { useCallback, useEffect, useState } from 'react'
+import { Card } from 'scryfall-sdk'
+import { CardService } from '../services/card.service'
 
-import { AgGridReact } from '@ag-grid-community/react'; // the AG Grid React Component
+import { AgGridReact } from '@ag-grid-community/react' // the AG Grid React Component
 
-ModuleRegistry.registerModules([ServerSideRowModelModule]);
+ModuleRegistry.registerModules([ServerSideRowModelModule])
 
 const scryfallDatasource: IServerSideDatasource = {
   getRows(params: IServerSideGetRowsParams<any>): void {
     CardService.getCards(
       params.request.startRow,
-      params.request.endRow
-    ).subscribe((response) => {
-      params.success({ rowData: response });
-    });
+      params.request.endRow,
+    ).subscribe(response => {
+      params.success({ rowData: response })
+    })
   },
-  destroy(): void {},
-};
+  destroy(): void {
+    console.log('should do some cleanup')
+  },
+}
 
 const colDefs: ColDef[] = [
   { field: 'name', filter: true },
   { field: 'set', filter: true },
   { field: 'type_line', headerName: 'Type' },
-];
+]
 
 const gridOptions: GridOptions = {
   // Scryfall API requests debouce of 50-100 ms
@@ -51,26 +53,28 @@ const gridOptions: GridOptions = {
   rowModelType: 'serverSide',
   rowSelection: 'multiple',
   serverSideDatasource: scryfallDatasource,
-};
+}
 
 /* eslint-disable-next-line */
 export interface CardManagerProps {}
 
 export function CardManager(props: CardManagerProps) {
-  const [gridApi, setGridApi] = useState<GridApi | null>(null);
-  const [rowData, setRowData] = useState([] as Card[]); // Set rowData to Array of Objects, one Object per Row
+  const [gridApi, setGridApi] = useState<GridApi | null>(null)
+  const [rowData, setRowData] = useState([] as Card[]) // Set rowData to Array of Objects, one Object per Row
 
   // Example load data from sever
   useEffect(() => {
-    CardService.getCards().subscribe((cards) => {
-      console.log(cards);
-      setRowData(cards);
-    });
-  }, []);
+    CardService.testApi()
+
+    CardService.getCards().subscribe(cards => {
+      console.log(cards)
+      setRowData(cards)
+    })
+  }, [])
 
   const onGridReady = useCallback((gridReadyEvent: GridReadyEvent) => {
-    setGridApi(gridReadyEvent.api);
-  }, []);
+    setGridApi(gridReadyEvent.api)
+  }, [])
 
   return (
     <div className={`${styles['container']} ag-theme-alpine full-page-table`}>
@@ -80,7 +84,7 @@ export function CardManager(props: CardManagerProps) {
         onGridReady={onGridReady}
       />
     </div>
-  );
+  )
 }
 
-export default CardManager;
+export default CardManager
