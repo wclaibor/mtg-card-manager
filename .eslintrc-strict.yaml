@@ -1,0 +1,94 @@
+extends:
+  - './.eslintrc-basic.yaml'
+
+plugins:
+  - jsdoc
+
+settings:
+  jsdoc:
+    mode: typescript
+    ignorePrivate: 1
+    tagNamePreference:
+      hidden: internal
+    overrideReplacesDocs: true
+
+rules:
+  '@typescript-eslint/array-type':
+    - error
+    - options:
+        default: array-simple
+  '@typescript-eslint/consistent-type-assertions': error
+  '@typescript-eslint/no-inferrable-types': error
+  '@typescript-eslint/no-unsafe-call': error
+  '@typescript-eslint/no-unsafe-member-access': error
+  # Conflicts with the optional chaining in if statements.
+  # '@typescript-eslint/strict-boolean-expressions': warn
+  '@typescript-eslint/prefer-nullish-coalescing': error
+  '@typescript-eslint/prefer-optional-chain': error
+  '@typescript-eslint/switch-exhaustiveness-check': error
+  '@typescript-eslint/no-non-null-assertion': warn
+  '@typescript-eslint/no-explicit-any': warn
+  no-restricted-imports:
+    - error
+    - patterns:
+        - 'packages/*'
+        - 'rxjs/Rx'
+        - '@northfork/**/*.ts'
+        - 'lodash'
+  curly:
+    - error
+  no-else-return:
+    - error
+
+  # jsdoc/check-alignment: 2
+  # jsdoc/check-examples: 2
+  # jsdoc/check-indentation: 2
+  jsdoc/check-param-names: 2
+  jsdoc/check-syntax: 2
+  jsdoc/check-tag-names:
+    - error
+    - definedTags:
+        ## typedoc ignore tag
+        - internal
+        ## typedoc generic tag
+        - typeparam
+        ## typedoc plugin tag
+        - noInheritDoc
+  jsdoc/check-types: 2
+  jsdoc/implements-on-classes: 2
+  # jsdoc/match-description: 2
+  jsdoc/newline-after-description: 2
+  jsdoc/no-types: 2
+  jsdoc/no-undefined-types: 2
+  jsdoc/require-description:
+    - error
+    - exemptedBy:
+        - internal
+      contexts:
+        - ArrowFunctionExpression
+        - FunctionDeclaration
+        - FunctionExpression
+        # - TSInterfaceDeclaration
+        # - TSTypeAliasDeclaration
+        # - TSEnumDeclaration
+  # jsdoc/require-description-complete-sentence: 2
+  # jsdoc/require-example: 2
+  jsdoc/require-hyphen-before-param-description: 0
+  jsdoc/require-jsdoc:
+    - error
+    # - contexts:
+    #     # - Property
+    #     - TSInterfaceDeclaration
+    #     - TSTypeAliasDeclaration
+    #     - TSEnumDeclaration
+    # publicOnly:
+    #   ancestorsOnly: true
+    #   esm: false
+    #   cjs: false
+    #   window: false
+    # require:
+    #   ArrowFunctionExpression: false
+  jsdoc/require-param-description: 2
+  jsdoc/require-returns-check: 2
+  jsdoc/require-returns-description: 2
+  jsdoc/valid-types: 2

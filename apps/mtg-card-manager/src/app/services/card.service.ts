@@ -1,5 +1,7 @@
+import { CardsRequest, CardsResponse } from 'libs/card-lib'
 import { parse } from 'papaparse'
 import { from } from 'rxjs'
+import { ajax } from 'rxjs/ajax'
 import { switchMap } from 'rxjs/operators'
 import { ScryfallService } from './scryfall.service'
 
@@ -11,8 +13,9 @@ export class CardService {
   private static decoder = new TextDecoder('utf-8')
 
   static testApi() {
-    // return ajax.get('/api')
-    return fetch('/api/test').then(t => t.json())
+    const request: CardsRequest = { start: 0, end: 0 }
+    return ajax.post<CardsResponse>('/api/cards', request)
+    // return fetch('/api/test').then(t => t.json())
   }
 
   static getCards(startRow?: number, endRow?: number) {
