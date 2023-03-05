@@ -1,14 +1,14 @@
 import { parse } from 'papaparse'
-import { ScryfallService } from './scryfall.service'
-import { switchMap } from 'rxjs/operators'
 import { from } from 'rxjs'
+import { switchMap } from 'rxjs/operators'
+import { ScryfallService } from './scryfall.service'
 
 function getCardName(card: any) {
   return card['Card Name']
 }
 
 export class CardService {
-  static getCards() {
+  static getCards(startRow?: number, endRow?: number) {
     return from(
       fetch('all_my_cards.csv').then((response) => {
         let reader = response.body?.getReader()
