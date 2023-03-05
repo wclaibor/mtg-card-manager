@@ -11,8 +11,8 @@ export class CardService {
   private static decoder = new TextDecoder('utf-8')
 
   static testApi() {
-    // return ajax.get('/api').pipe(map(response => response.response))
-    fetch('/api').then(response => console.log(response))
+    // return ajax.get('/api')
+    return fetch('/api/test').then(t => t.json())
   }
 
   static getCards(startRow?: number, endRow?: number) {

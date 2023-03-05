@@ -64,7 +64,7 @@ export function CardManager(props: CardManagerProps) {
 
   // Example load data from sever
   useEffect(() => {
-    CardService.testApi()
+    CardService.testApi().then(response => console.log(response))
 
     CardService.getCards().subscribe(cards => {
       console.log(cards)

@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import viteTsConfigPaths from 'vite-tsconfig-paths';
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/mtg-card-manager',
@@ -9,6 +9,9 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
   },
 
   preview: {
@@ -40,4 +43,4 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
-});
+})
