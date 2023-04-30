@@ -13,6 +13,15 @@ export function parseCsv(): string[] {
     'utf-8',
   )
   return uniq(
-    parse(rawCards, { header: true }).data.map(data => data['Card Name']),
+    parse(rawCards, { header: true })
+      .data.map(data => data['Card Name'])
+      .filter(cardName => cardName != null)
+      .filter((cardName: string) => !cardName.includes('Token'))
+      .map((cardName: string) => {
+        if (cardName.includes(' // ')) {
+          return cardName.slice(0, cardName.indexOf(' // '))
+        }
+        return cardName
+      }),
   )
 }

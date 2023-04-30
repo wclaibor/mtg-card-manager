@@ -14,6 +14,8 @@ CardsApi.post<never, CardsResponse, CardsRequest>(
 
     const cards = await getCardDetails(cardNames.slice(start, end)).waitForAll()
 
+    console.log(`returning ${cards.length} cards`)
+
     return res.send({ cards })
   },
 )
