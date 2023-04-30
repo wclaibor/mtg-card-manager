@@ -2,6 +2,7 @@ import styles from './card-manager.module.scss'
 
 import {
   ColDef,
+  GetRowIdParams,
   GridApi,
   GridOptions,
   GridReadyEvent,
@@ -53,6 +54,9 @@ const gridOptions: GridOptions = {
   rowModelType: 'serverSide',
   rowSelection: 'multiple',
   serverSideDatasource: scryfallDatasource,
+  getRowId: (params: GetRowIdParams<Card>) => {
+    return params.data.name
+  },
 }
 
 /* eslint-disable-next-line */

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { uniq } from 'lodash'
 import { parse } from 'papaparse'
 import path from 'path'
 
@@ -11,5 +12,7 @@ export function parseCsv(): string[] {
     path.join(process.cwd(), 'assets/all_my_cards.csv'),
     'utf-8',
   )
-  return parse(rawCards, { header: true }).data.map(data => data['Card Name'])
+  return uniq(
+    parse(rawCards, { header: true }).data.map(data => data['Card Name']),
+  )
 }

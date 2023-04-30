@@ -10,11 +10,9 @@ CardsApi.post<never, CardsResponse, CardsRequest>(
   async (req, res) => {
     const { start, end } = req.body
 
-    console.log({ start, end })
+    const cardNames = parseCsv()
 
-    const cardNames = parseCsv().slice(start, end)
-
-    const cards = await getCardDetails(cardNames).waitForAll()
+    const cards = await getCardDetails(cardNames.slice(start, end)).waitForAll()
 
     return res.send({ cards })
   },
