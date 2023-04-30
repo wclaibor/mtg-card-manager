@@ -1,9 +1,5 @@
 import { CardsRequest, CardsResponse } from 'libs/card-lib'
-import { parse } from 'papaparse'
-import { from } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
-import { switchMap } from 'rxjs/operators'
-import { ScryfallService } from './scryfall.service'
 
 function getCardName(card: any) {
   return card['Card Name']
@@ -18,25 +14,26 @@ export class CardService {
     // return fetch('/api/test').then(t => t.json())
   }
 
-  static getCards(startRow?: number, endRow?: number) {
-    return from(
-      fetch('all_my_cards.csv').then(response => {
-        const reader = response.body?.getReader()
-        if (reader == null) {
-          return ''
-        }
+  static getCards(start?: number, end?: number) {
+    return ajax.post<CardsResponse>('/api/cards', { start, end })
+    // return from(
+    //   fetch('all_my_cards.csv').then(response => {
+    //     const reader = response.body?.getReader()
+    //     if (reader == null) {
+    //       return ''
+    //     }
 
-        return reader.read().then(function (result) {
-          return CardService.decoder.decode(result.value)
-        })
-      }),
-    ).pipe(
-      switchMap((rawCards: string) => {
-        const parsed = parse(rawCards, { header: true }).data
-        const names = parsed.map(card => getCardName(card))
+    //     return reader.read().then(function (result) {
+    //       return CardService.decoder.decode(result.value)
+    //     })
+    //   }),
+    // ).pipe(
+    //   switchMap((rawCards: string) => {
+    //     const parsed = parse(rawCards, { header: true }).data
+    //     const names = parsed.map(card => getCardName(card))
 
-        return ScryfallService.getCardsByName(names)
-      }),
-    )
+    //     return ScryfallService.getCardsByName(names)
+    //   }),
+    // )
   }
 }

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { CardsRequest, CardsResponse } from 'libs/card-lib'
 import { parseCsv } from './parse-csv'
+import { getCardDetails } from './scryfall-api'
 
 const CardsApi = Router()
 
@@ -11,9 +12,11 @@ CardsApi.post<never, CardsResponse, CardsRequest>(
 
     console.log({ start, end })
 
-    const cardNames = parseCsv()
+    const cardNames = parseCsv().slice(start, end)
 
-    return res.send({ cards: cardNames })
+    const cards = await getCardDetails(cardNames).waitForAll()
+
+    return res.send({ cards })
   },
 )
 

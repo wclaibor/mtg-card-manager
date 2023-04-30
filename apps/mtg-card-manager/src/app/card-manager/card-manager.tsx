@@ -12,7 +12,7 @@ import {
 import '@ag-grid-community/styles/ag-grid.css' // Core grid CSS, always needed
 import '@ag-grid-community/styles/ag-theme-alpine.css' // Optional theme CSS
 import { ServerSideRowModelModule } from '@ag-grid-enterprise/server-side-row-model'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Card } from 'scryfall-sdk'
 import { CardService } from '../services/card.service'
 
@@ -21,12 +21,12 @@ import { AgGridReact } from '@ag-grid-community/react' // the AG Grid React Comp
 ModuleRegistry.registerModules([ServerSideRowModelModule])
 
 const scryfallDatasource: IServerSideDatasource = {
-  getRows(params: IServerSideGetRowsParams<any>): void {
+  getRows(params: IServerSideGetRowsParams<Card>): void {
     CardService.getCards(
       params.request.startRow,
       params.request.endRow,
-    ).subscribe(response => {
-      params.success({ rowData: response })
+    ).subscribe(({ response }) => {
+      params.success({ rowData: response.cards })
     })
   },
   destroy(): void {
@@ -60,17 +60,6 @@ export interface CardManagerProps {}
 
 export function CardManager(props: CardManagerProps) {
   const [gridApi, setGridApi] = useState<GridApi | null>(null)
-  const [rowData, setRowData] = useState([] as Card[]) // Set rowData to Array of Objects, one Object per Row
-
-  // Example load data from sever
-  useEffect(() => {
-    CardService.testApi().subscribe(response => console.log(response))
-
-    CardService.getCards().subscribe(cards => {
-      console.log(cards)
-      setRowData(cards)
-    })
-  }, [])
 
   const onGridReady = useCallback((gridReadyEvent: GridReadyEvent) => {
     setGridApi(gridReadyEvent.api)
@@ -78,11 +67,7 @@ export function CardManager(props: CardManagerProps) {
 
   return (
     <div className={`${styles['container']} ag-theme-alpine full-page-table`}>
-      <AgGridReact
-        // rowData={rowData} // Row Data for Rows
-        gridOptions={gridOptions}
-        onGridReady={onGridReady}
-      />
+      <AgGridReact gridOptions={gridOptions} onGridReady={onGridReady} />
     </div>
   )
 }

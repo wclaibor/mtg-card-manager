@@ -6,11 +6,10 @@ function getCardName(card: any) {
   return card['Card Name']
 }
 
-export function parseCsv() {
+export function parseCsv(): string[] {
   const rawCards = fs.readFileSync(
     path.join(process.cwd(), 'assets/all_my_cards.csv'),
     'utf-8',
   )
-  const parsed = parse(rawCards, { header: true }).data
-  return parsed.map(card => getCardName(card))
+  return parse(rawCards, { header: true }).data.map(data => data['Card Name'])
 }
